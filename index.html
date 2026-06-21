@@ -1301,8 +1301,8 @@
               <div class="tn-atom">
                 <img
                   class="tn-atom__img t-img"
-                  data-original="МӨЛДІР.png?v=2"
-                  src="МӨЛДІР.png?v=2"
+                  data-original="МӨЛДІР.png?v=3"
+                  src="МӨЛДІР.png?v=3"
                   alt=""
                   imgfield="tn_img_1770294194438"
                 />
@@ -3408,7 +3408,7 @@
               data-field-fontsize-res-320-value="40"
             >
               <div class="tn-atom" field="tn_text_176241505970969720">
-                Досжан<br />мен<br />Назеркенің
+                Досжан мен<br />келініміз<br />Назеркенің
               </div>
             </div>
             <div
@@ -3474,9 +3474,11 @@
               data-field-fontsize-res-320-value="15"
             >
               <div class="tn-atom" field="tn_text_176241505972519710">
-                туған-туыстар мен
+                ағайын-туыс, бауырлар,
                 <br />
-                қымбатты достар!
+                құда-жекжат,
+                <br />
+                нағашы-жиен, бөлелер, дос-жаран, көршілер мен әріптестер!
               </div>
             </div>
             <div
@@ -3646,7 +3648,7 @@
               <div class="tn-atom" field="tn_text_176241505973026670">
                 СІЗДЕРДІ
                 <br />
-                АЯУЛЫ БАЛАЛАРЫМЫЗ
+                ҰЛЫМЫЗ
               </div>
             </div>
             <div
@@ -6256,6 +6258,13 @@
             return;
           }
 
+          var ageCheck = form.querySelector(".age16-confirm, #age16-confirm");
+          if (ageCheck && !ageCheck.checked) {
+            alert("«16 жастан асқанмын» деген белгіні қойыңыз");
+            ageCheck.focus();
+            return;
+          }
+
           var payload = {
             createdAt: new Intl.DateTimeFormat("ru-RU", {
               timeZone: "Asia/Almaty",
@@ -6381,38 +6390,47 @@
         });
       })();
     </script>
-    <!-- Robust "no children" note near submit button -->
+    <!-- Robust "16+" confirmation checkbox near submit button -->
     <script>
       (function () {
-        function ensureNote() {
+        function ensureAgeCheck() {
           var form = document.querySelector("#rec1878418453 form");
           if (!form) return;
           var btn = form.querySelector(
             'button[type="submit"], input[type="submit"], .t-submit, .submit-btn',
           );
           if (!btn) return;
-          if (form.querySelector(".no-kids-note")) return;
-          var note = document.createElement("div");
-          note.className = "no-kids-note";
-          note.textContent =
-            "Өтініш, тойымызға балаларсыз келулеріңізді сұраймыз 🤍";
-          note.style.cssText =
-            "margin:6px auto 18px;max-width:300px;padding:11px 16px;" +
+          if (form.querySelector(".age-confirm-row")) return;
+          var label = document.createElement("label");
+          label.className = "age-confirm-row";
+          label.style.cssText =
+            "display:flex;align-items:center;justify-content:center;gap:10px;" +
+            "cursor:pointer;margin:6px auto 18px;max-width:300px;padding:12px 16px;" +
             "background:#eef2f8;border:1px solid #1e4d8c;border-radius:14px;" +
-            "color:#1e4d8c;font-size:14px;line-height:1.45;text-align:center;" +
-            "font-style:italic;letter-spacing:0.2px;";
+            "color:#1e4d8c;font-size:15px;line-height:1.35;text-align:center;" +
+            "letter-spacing:0.2px;";
+          var cb = document.createElement("input");
+          cb.type = "checkbox";
+          cb.id = "age16-confirm";
+          cb.className = "age16-confirm";
+          cb.style.cssText =
+            "width:20px;height:20px;accent-color:#1e4d8c;flex:0 0 auto;cursor:pointer;margin:0;";
+          var span = document.createElement("span");
+          span.textContent = "16 жастан асқанмын";
+          label.appendChild(cb);
+          label.appendChild(span);
           var anchor =
             btn.closest(".t-form__submit") || btn.parentElement || btn;
-          anchor.parentElement.insertBefore(note, anchor);
+          anchor.parentElement.insertBefore(label, anchor);
         }
-        document.addEventListener("DOMContentLoaded", ensureNote);
-        window.addEventListener("load", ensureNote);
+        document.addEventListener("DOMContentLoaded", ensureAgeCheck);
+        window.addEventListener("load", ensureAgeCheck);
         var n = 0;
         var iv = setInterval(function () {
-          ensureNote();
+          ensureAgeCheck();
           if (++n > 40) clearInterval(iv);
         }, 400);
-        new MutationObserver(ensureNote).observe(document.documentElement, {
+        new MutationObserver(ensureAgeCheck).observe(document.documentElement, {
           childList: true,
           subtree: true,
         });
