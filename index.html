@@ -3976,10 +3976,6 @@
             </div>
           </div>
 
-          <svg class="wp-play" viewBox="0 0 78 78" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="39" cy="39" r="30" />
-            <path d="M33 28 L52 39 L33 50 Z" fill="currentColor" stroke="none" />
-          </svg>
         </div>
       </div>
       <div
@@ -4848,6 +4844,7 @@
             left: calc(50% - 600px + 708px);
             width: 428px;
             height: 10px;
+            display: none !important;
           }
           #rec1878418453 .tn-elem[data-elem-id="175897626609987350"] .tn-atom {
             border-radius: 0px 0px 0px 0px;
@@ -6214,21 +6211,6 @@
           if (button) {
             button.type = "submit";
             button.classList.add("submit-btn");
-
-            if (!form.querySelector(".no-kids-note")) {
-              var note = document.createElement("div");
-              note.className = "no-kids-note";
-              note.textContent =
-                "Өтініш, тойымызға балаларсыз келулеріңізді сұраймыз 🤍";
-              note.style.cssText =
-                "margin:6px auto 18px;max-width:300px;padding:11px 16px;" +
-                "background:#eef2f8;border:1px solid #1e4d8c;border-radius:14px;" +
-                "color:#1e4d8c;font-size:14px;line-height:1.45;text-align:center;" +
-                "font-style:italic;letter-spacing:0.2px;";
-              var anchor =
-                button.closest(".t-form__submit") || button.parentElement || button;
-              anchor.parentElement.insertBefore(note, anchor);
-            }
           }
         }
 
@@ -6394,6 +6376,43 @@
           formObserver.disconnect();
         });
         formObаserver.observe(document.documentElement, {
+          childList: true,
+          subtree: true,
+        });
+      })();
+    </script>
+    <!-- Robust "no children" note near submit button -->
+    <script>
+      (function () {
+        function ensureNote() {
+          var form = document.querySelector("#rec1878418453 form");
+          if (!form) return;
+          var btn = form.querySelector(
+            'button[type="submit"], input[type="submit"], .t-submit, .submit-btn',
+          );
+          if (!btn) return;
+          if (form.querySelector(".no-kids-note")) return;
+          var note = document.createElement("div");
+          note.className = "no-kids-note";
+          note.textContent =
+            "Өтініш, тойымызға балаларсыз келулеріңізді сұраймыз 🤍";
+          note.style.cssText =
+            "margin:6px auto 18px;max-width:300px;padding:11px 16px;" +
+            "background:#eef2f8;border:1px solid #1e4d8c;border-radius:14px;" +
+            "color:#1e4d8c;font-size:14px;line-height:1.45;text-align:center;" +
+            "font-style:italic;letter-spacing:0.2px;";
+          var anchor =
+            btn.closest(".t-form__submit") || btn.parentElement || btn;
+          anchor.parentElement.insertBefore(note, anchor);
+        }
+        document.addEventListener("DOMContentLoaded", ensureNote);
+        window.addEventListener("load", ensureNote);
+        var n = 0;
+        var iv = setInterval(function () {
+          ensureNote();
+          if (++n > 40) clearInterval(iv);
+        }, 400);
+        new MutationObserver(ensureNote).observe(document.documentElement, {
           childList: true,
           subtree: true,
         });
